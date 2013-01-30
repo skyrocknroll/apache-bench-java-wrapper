@@ -9,22 +9,24 @@ import java.io.InputStreamReader;
 public class CreateCommandString {
 
 	String folderForUploadFile = "/srv/source/photovault/trunk/pv_storage/pvss_test/fixture/perf/";
-	String httpMethod = "POST";
+	String httpMethod = "GET";
 	String perfTool = "ab";
 	String numberOfRequests = "1";
 	String concurrentRequests = "1";
 	String fileToUpload = "50kb.jpg";
-	String pathToTest = "http://localhost/post/perf/";
+	String pathToTest = "http://localhost/pvss/sdev1/";
 	String fileToTest = fileToUpload;
 	String outputDirectory = "/srv/out/";
 
 	public String[] createCommand() {
 
 		if (httpMethod.equalsIgnoreCase("POST")) {
-			return new String[] { perfTool, "-n", numberOfRequests, "-c", concurrentRequests, "-p",
+			System.out.println("Executing Command: "+perfTool+ "-n"+ numberOfRequests+ "-c"+ concurrentRequests+ "-p"+folderForUploadFile + fileToUpload+ pathToTest + fileToTest);
+			return new String[] { perfTool, "-n", numberOfRequests, "-c", concurrentRequests, "-k" , "-p",
 					folderForUploadFile + fileToUpload, pathToTest + fileToTest };
 		} else {
-			return new String[] { perfTool, "-n", numberOfRequests, "-c", concurrentRequests, pathToTest + fileToTest };
+			System.out.println("Executing command : " + perfTool+ "-n"+ numberOfRequests+ "-c"+ concurrentRequests+ pathToTest + fileToTest);
+			return new String[] { perfTool, "-n", numberOfRequests, "-c", concurrentRequests,"-k", pathToTest + "?img="+fileToTest };
 
 		}
 
@@ -61,7 +63,7 @@ public class CreateCommandString {
 
 				}
 			}else {
-				System.err.println("Command Execution Failed. \n Error Return Code : "+ x);
+				System.out.println("Command Execution Failed. \n Error Return Code : "+ x);
 			}
 			out.close();
 		} catch (IOException e) {
